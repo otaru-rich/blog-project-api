@@ -99,6 +99,9 @@ To get started with the project API, follow these steps:
 
 ## API Documentation
 
-## Contact
+## Database Schema Design
+
+![](../../../../var/folders/gf/zxt209bx0knd_c1j5rvf0cqc0000gn/T/TemporaryItems/NSIRD_screencaptureui_AHEqa6/Screenshot 2023-08-12 at 15.12.57.png)
+
 
 For any inquiries or support, please contact [Richard Otaru](mailto:richotaru@gmail.com).

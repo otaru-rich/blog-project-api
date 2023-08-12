@@ -131,3 +131,9 @@ dist
 # IDE specific
 .idea
 .idea/
+/src/config/database.js
+/src/controllers/post.controller.js
+/src/middlewares/auth.middleware.js
+/src/routes/index.js
+/src/services/post.service.js
+/src/services/user.service.js

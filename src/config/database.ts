@@ -3,7 +3,7 @@ import { createConnection } from 'typeorm'
 import entities from '../models'
 
 import * as dotenv from 'dotenv'
-import {logger} from "../utils/logger";
+import { logger } from '../utils/logger'
 
 const { Post, User } = entities
 
@@ -18,7 +18,7 @@ class DBConfig {
   constructor () {
     this.dbConfig()
       .then(db => { logger.info('Database config completed...') })
-        .catch(err => {logger.error('Database config Error...', err) });
+      .catch(err => { logger.error('Database config Error...', err) })
   }
 
   /**
@@ -39,5 +39,5 @@ class DBConfig {
   }
 }
 
-const startUpDb = ():DBConfig =>new DBConfig();
+const startUpDb = (): DBConfig => new DBConfig()
 export default startUpDb

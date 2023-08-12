@@ -12,8 +12,8 @@ class PostControllers {
      * @param res
      * @returns response
      */
-  findPosts = async (req: Request, res: Response): Promise<Response> => {
-    const response = await PostService.findPosts();
+  fetchAllPosts = async (req: Request, res: Response): Promise<Response> => {
+    const response = await PostService.fetchAllPosts()
     return responses.success(
       200,
       'success',
@@ -68,7 +68,7 @@ class PostControllers {
 
     return responses.success(
       201,
-      'created',
+      'Post created successfully',
       { postId, title, description },
       res
     )
@@ -99,7 +99,7 @@ class PostControllers {
         publisherId: parseInt(userId),
         title,
         description
-      });
+      })
     return responses.success(
       200,
       'success',
@@ -109,7 +109,7 @@ class PostControllers {
   }
 
   /**
-     * Update one post
+     * delete one post
      * @param req
      * @param res
      * @returns response

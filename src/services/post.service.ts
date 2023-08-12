@@ -1,7 +1,7 @@
 import Post, { type IPost } from '../models/post.model'
 import UserServices from '../services/user.service'
 import { logger } from '../utils/logger'
-import {DeleteResult, InsertResult, UpdateResult} from "typeorm";
+import { type DeleteResult, type InsertResult, type UpdateResult } from 'typeorm'
 const UserService = new UserServices()
 
 class PostServices {
@@ -10,8 +10,8 @@ class PostServices {
      * @async
      * @returns Promise
      */
-  findPosts = async (): Promise<[Post[],number]> => {
-    return await Post.findAndCount();
+  fetchAllPosts = async (): Promise<[Post[], number]> => {
+    return await Post.findAndCount()
   }
 
   /**
@@ -24,7 +24,7 @@ class PostServices {
 
     if (result === null) {
       logger.error(`cannot find post with id ${postId}`)
-      return null;
+      return null
     }
     return result
   }
@@ -37,11 +37,11 @@ class PostServices {
   createPost = async (post: IPost): Promise<InsertResult> => {
     const publisher = await UserService.findOneUser(post.publisherId)
 
-    return  await Post.insert({
+    return await Post.insert({
       title: post.title,
       description: post.description,
       publisher
-    });
+    })
   }
 
   /**
@@ -51,7 +51,7 @@ class PostServices {
      * @returns Promise
      */
   updatePost = async (postId: number, post: IPost): Promise<UpdateResult> => {
-    return await Post.update(postId, post);
+    return await Post.update(postId, post)
   }
 
   /**
@@ -60,7 +60,7 @@ class PostServices {
      * @returns Promise
      */
   deletePost = async (postId: number): Promise<DeleteResult> => {
-    return await Post.delete({ postId });
+    return await Post.delete({ postId })
   }
 
   /**

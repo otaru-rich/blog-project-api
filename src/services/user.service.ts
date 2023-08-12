@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv'
 
 dotenv.config()
 const { JWT_PRIVATE_KEY, JWT_EXPIRY_TIME, SALT_ROUND } = process.env
-const saltInteger = parseInt(SALT_ROUND??"10", 10)
+const saltInteger = parseInt(SALT_ROUND ?? '10', 10)
 
 class UserServices {
   /**
@@ -15,7 +15,7 @@ class UserServices {
      * @async
      * @returns Promise
      */
-  findUsers = async (): Promise<any | null> => {
+  fetchAllUsers = async (): Promise<any | null> => {
     const result = await User.findAndCount()
 
     if (!result) {
@@ -38,7 +38,7 @@ class UserServices {
     if (result === null) {
       return null
     }
-    result.password = '';
+    result.password = ''
     return result
   }
 
@@ -119,7 +119,7 @@ class UserServices {
     return jwt.sign({
       userId: user.userId,
       role: user.role
-    }, JWT_PRIVATE_KEY??'secret',
+    }, JWT_PRIVATE_KEY ?? 'secret',
     { expiresIn: JWT_EXPIRY_TIME })
   }
 }

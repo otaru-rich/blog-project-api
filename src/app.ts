@@ -4,22 +4,20 @@ import swaggerUi from 'swagger-ui-express'
 import { route } from './routes'
 import * as dotenv from 'dotenv'
 import { logger } from './utils/logger'
-import startUpDb from "./config/database";
+import startUpDb from './config/database'
 
-
-const app = express();
+const app = express()
 
 /**
  * DB configuration init
  */
-startUpDb();
+startUpDb()
 
-dotenv.config();
+dotenv.config()
 
+app.use(express.json())
 
-app.use(express.json());
-
-const PORT = process.env.PORT ?? 3003;
+const PORT = process.env.PORT ?? 3003
 
 route(app)
 

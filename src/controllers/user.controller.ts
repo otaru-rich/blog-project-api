@@ -13,11 +13,11 @@ class UserControllers {
      * @param res
      * @returns response
      */
-  findUsers = async (req: Request, res: Response): Promise<Response> => {
-    const response = await UserService.findUsers()
+  fetchAllUsers = async (req: Request, res: Response): Promise<Response> => {
+    const response = await UserService.fetchAllUsers()
 
     if (response === null) {
-      return responses.error(404, 'Not Found', res)
+      return responses.error(404, 'Users Not Found', res)
     }
 
     return responses.success(
@@ -72,7 +72,7 @@ class UserControllers {
 
     return responses.success(
       200,
-      'logged in',
+      'logged in successfully',
       { username, token },
       res
     )
@@ -102,14 +102,14 @@ class UserControllers {
     })
 
     if (response === null) {
-      return responses.error(404, 'Not Found', res)
+      return responses.error(500, 'An error occurred while creating the user', res)
     }
 
     const userId = response.raw.insertId
 
     return responses.success(
       201,
-      'created',
+      'User created successfully',
       { userId, username, email },
       res
     )
@@ -141,12 +141,12 @@ class UserControllers {
     })
 
     if (response === null) {
-      return responses.error(404, 'Not Found', res)
+      return responses.error(500, 'An error occurred while updating the user info', res)
     }
 
     return responses.success(
       200,
-      'success',
+      'User Info successfully updated',
       { userId, username, email },
       res
     )
@@ -164,10 +164,10 @@ class UserControllers {
     const response = await UserService.deleteUser(parseInt(userId))
 
     if (response === null) {
-      return responses.error(404, 'Not Found', res)
+      return responses.error(404, 'Error while attempting to remove user', res)
     }
 
-    return responses.ok(200, 'success', res)
+    return responses.ok(200, 'User removed successfully', res)
   }
 }
 
