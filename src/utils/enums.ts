@@ -1,0 +1,5 @@
+export enum Role {
+  GUEST = 'NOT_AUTHENTICATED',
+  USER = 'AUTHENTICATED_USER',
+  ADMIN = 'SUPER_ADMIN',
+}
