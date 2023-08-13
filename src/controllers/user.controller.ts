@@ -2,7 +2,6 @@ import { type Request, type Response } from 'express'
 import responses from '../utils/response'
 
 import Service from '../services'
-import type response from '../utils/response'
 
 const { UserService } = Service
 

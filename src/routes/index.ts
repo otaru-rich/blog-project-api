@@ -4,7 +4,11 @@ import responses from '../utils/response'
 import { authorize } from '../middlewares/auth.middleware'
 import { Role } from '../utils/enums'
 
+
 const { PostController, UserController } = Controllers
+
+
+
 
 class Routes {
   public router = (app: Application): void => {
@@ -13,8 +17,6 @@ class Routes {
      * /:
      *   get:
      *     summary: Welcome to the API
-     *     requestParameters:
-     *       required: false
      *     responses:
      *       '200':
      *         message: Welcome
@@ -30,20 +32,25 @@ class Routes {
      * /users:
      *   get:
      *     summary: Fetch a list of all users and count
-     *     requestParameters:
-     *       required: false
      *     responses:
      *       '200':
      *         description: success
      *         content:
      *          application/json:
-     *         schema:
-     *          type: object
-     *         properties:
-     *           count:
-     *             type: integer
-     *           data:
-     *             type: array
+     *            schema:
+     *              type: object
+     *              properties:
+     *                  count:
+     *                    type: integer
+     *                  data:
+     *                    type: array
+     *                    items:
+     *                        type: object
+     *                        properties:
+     *                          username:
+     *                            type: string
+     *                          email:
+     *                            type: string
      *       '404':
      *         description: Users Not Found
      */
@@ -53,9 +60,25 @@ class Routes {
      * /users/:userId:
      *   get:
      *     summary: Find one User given their userId
-     * @param req
-     * @param res
-     * @returns response
+     *     requestParameter:
+     *        required: true
+     *        properties:
+     *           postId:
+     *            type: integer
+     *     responses:
+     *       '200':
+     *         description: success
+     *         content:
+     *            application/json:
+     *              schema:
+     *                type: object
+     *                properties:
+     *                  username:
+     *                    type: string
+     *                  email:
+     *                    type: string
+     *       '404':
+     *         description: User Not Found
      */
     app.get('/users/:userId', UserController.findOneUser)
     /**
@@ -173,7 +196,7 @@ class Routes {
     app.delete('/user/:userId', authorize(Role.ADMIN), UserController.deleteUser)
     /**
      * @swagger
-     * /posts:
+     * /blog-posts:
      *   get:
      *     summary: Find all posts on the platform (bad idea)
      *     responses:
@@ -188,13 +211,20 @@ class Routes {
      *                  type: integer
      *                data:
      *                  type: array
+     *                  items:
+     *                    type: object
+     *                    properties:
+     *                      title:
+     *                        type: string
+     *                      description:
+     *                        type: string
      *       '404':
      *         description: resource not found
      */
-    app.get('/posts', PostController.fetchAllPosts)
+    app.get('/blog-posts', PostController.fetchAllPosts)
     /**
      * @swagger
-     * /posts/:postId:
+     * /blog-post/:postId:
      *   get:
      *     summary: Find one post by postId
      *     requestParameter:
@@ -219,10 +249,10 @@ class Routes {
      *       '404':
      *         description: Post Not Found
      */
-    app.get('/posts/:postId', PostController.findOnePost)
+    app.get('/blog-post/:postId', PostController.findOnePost)
     /**
      * @swagger
-     * /post:
+     * /blog-post:
      *   post:
      *     summary: Create a new post
      *     requestBody:
@@ -253,10 +283,10 @@ class Routes {
      *         '500':
      *               description: An error occurred while creating post
      */
-    app.post('/post', authorize(Role.USER), PostController.createPost)
+    app.post('/blog-post', authorize(Role.USER), PostController.createPost)
     /**
      * @swagger
-     * /post/:postId:
+     * /blog-post/:postId:
      *   put:
      *     summary: Update a post by postId
      *     requestParameter:
@@ -281,12 +311,12 @@ class Routes {
      *       '403':
      *          description: Cannot Update this Post
      */
-    app.put('/post/:postId', authorize(Role.USER), PostController.updatePost)
+    app.put('/blog-post/:postId', authorize(Role.USER), PostController.updatePost)
     /**
      * @swagger
-     * /post/:postId:
+     * /blog-posts/:postId:
      *   delete:
-     *     summary: Create a new user
+     *     summary: delete post by postId
      *     requestBody:
      *       required: true
      *       content:
@@ -306,7 +336,8 @@ class Routes {
      *       '403':
      *         description: Cannot Delete this Post
      */
-    app.delete('/post/:postId', authorize(Role.USER), PostController.deletePost)
+    app.delete('/blog-posts/:postId', authorize(Role.USER), PostController.deletePost)
+
 
     // app.all('*', (req: Request, res: Response) => {
     //   responses.ok(404, 'Not Found', res)

@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt'
+import bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
 import { Role } from '../utils/enums'
 import User, { type IUser } from '../models/user.model'

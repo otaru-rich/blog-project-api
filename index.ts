@@ -1,10 +1,11 @@
 import express from 'express'
 import swaggerJsDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
-import { route } from './routes'
+import { route } from './src/routes'
 import * as dotenv from 'dotenv'
-import { logger } from './utils/logger'
-import startUpDb from './config/database'
+import { logger } from './src/utils/logger'
+import startUpDb from './src/config/database'
+const serverless = require('serverless-http');
 
 const app = express()
 
@@ -20,7 +21,6 @@ app.use(express.json())
 const PORT = process.env.PORT ?? 3003
 
 route(app)
-
 // Swagger setup
 const swaggerOptions = {
   definition: {
@@ -33,9 +33,13 @@ const swaggerOptions = {
   apis: ['./src/routes/*.ts']
 }
 
-const swaggerSpec = swaggerJsDoc(swaggerOptions)
+const swaggerSpec = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
 
-app.listen(PORT, () => {
-  logger.info(`Server is running on port ${PORT}`)
-})
+if (process.env.ENVIRONMENT === 'production') {
+  exports.handler = serverless(app);
+} else {
+  app.listen(PORT, () => {
+    logger.info(`Server is running on port ${PORT}`)
+  })
+}
