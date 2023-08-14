@@ -1,10 +1,9 @@
 import express from 'express'
-import swaggerJsDoc from 'swagger-jsdoc'
 import swaggerUi from 'swagger-ui-express'
 import { route } from './src/routes'
 import * as dotenv from 'dotenv'
-import { logger } from './src/utils/logger'
 import startUpDb from './src/config/database'
+import runAutogen from "./swagger_conf";
 const serverless = require('serverless-http');
 
 const app = express()
@@ -12,7 +11,9 @@ const app = express()
 /**
  * DB configuration init
  */
-startUpDb()
+startUpDb().then(() => {
+  console.log('Database connected');
+});
 
 dotenv.config()
 
@@ -21,25 +22,29 @@ app.use(express.json())
 const PORT = process.env.PORT ?? 3003
 
 route(app)
-// Swagger setup
-const swaggerOptions = {
-  definition: {
-    openapi: '3.0.0',
-    info: {
-      title: 'Blog Project API',
-      version: '1.0.0'
-    }
-  },
-  apis: ['./src/routes/*.ts']
+// a temporary solution to generate docs
+if (process.env.GEN_DOCS === 'true') {
+  console.log('Generating...');
+  const gen = runAutogen();
+  const waitFor = (time_mills:number) => new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve(true);
+    }, time_mills);
+  });
+  waitFor(5000).then(() => {
+    console.log('Docs generated');
+  });
 }
 
-const swaggerSpec = swaggerJsDoc(swaggerOptions);
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec))
-
+const swaggerDocs = require('./swagger_docs.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 if (process.env.ENVIRONMENT === 'production') {
   exports.handler = serverless(app);
+  console.log(`Server is running on production port ${PORT}`)
 } else {
   app.listen(PORT, () => {
-    logger.info(`Server is running on port ${PORT}`)
+    console.log(`Server is running on port ${PORT}`)
   })
 }
+
+

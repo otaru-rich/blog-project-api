@@ -8,7 +8,12 @@
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "build": "tsc",
-    "start": "tsc && node dist/index.js"
+    "start": "tsc && node dist/index.js",
+    "swagger:autogen": "ts-node ./swagger_conf.ts",
+    "copy:docs": "cpx './docs/**' 'dist/'",
+    "copy:module": "cpx './node_modules/**' 'dist/node_modules'",
+    "prepare": "npx tsc && npm run swagger:autogen && npm run copy:docs",
+    "start:prepare": "npm run prepare && node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -54,6 +59,7 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-promise": "^6.1.1",
+    "swagger-autogen": "^2.23.5",
     "ts-jest": "^29.1.0"
   }
 }
